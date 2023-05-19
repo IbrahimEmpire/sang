@@ -7,6 +7,7 @@ import * as dotenv from 'dotenv'
 
 import { MovieRouter } from "./Routers.js";
 import { userRouter } from "./user.js";
+import cors from 'cors'
 
 
 
@@ -14,6 +15,7 @@ import { userRouter } from "./user.js";
 dotenv.config()
 
 const app = express()
+app.use(cors())
 
 const PORT = process.env.PORT
 
