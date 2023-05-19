@@ -3,7 +3,7 @@ const Router = express.Router()
 import { Allbook, getById, deleted, Post, Put } from "./SubRouter.js";
 import { auth } from "./auth.js";
 
-Router.get("/",auth, async(req,res)=>{
+Router.get("/", async(req,res)=>{
     const { rating, language} = req.query
 
     if(req.query.rating){
