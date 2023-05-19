@@ -1,0 +1,335 @@
+mongo install pannanum and cmnnt la "mongo --version" nu podanum athula "show dbs"nu potta namba data base ellam vaarum
+
+
+
+
+
+mongo la db collection kaamikka
+    db.collection.find({})
+kuripitta data kaamikka
+    db.collection.find({name:"The Avengers})
+    
+
+line number 5 la kudutha maari namba oru data va insert pananum na first db ah create pannanum athuku just "use dbname"
+and "db" nu kudutha andha db name ah kattum and
+line 5 la kudutha maari data va insert pannanum 
+
+#####   91   ###
+
+inclution na db collection la namaku thevaiyaana data mattum edukurathu ex namaku name and rating matum venumna itha use pannala
+
+#### 96###
+
+exclution ithuku aposite namba kudutha value mattum varakoodathunu solrathuku 
+but same syntex
+
+100
+
+namba sql ah panna maari order and disorder asc and desc use panra method
+
+1 potta asc 0 potta desc nu arthen
+syntex anga paathuko
+
+104
+
+namaku thevaiyaana data oru limit kula venum na itha use pannalam ex ratinga desc order la kuduthuttu namaku 1st 3 data mattum venum na
+    db.new.find({}).sort({rating:-1}).limit(3)
+
+
+108
+sql ah ofset method maari inga skip method
+
+
+###########Start.js##
+prcess.argv itha console pannuna first varra value namba node ah enga install panni irukon and second indha file enga open aairuku 
+namba indha run panrathuku munnala terminal ah number potta athu last ah vaarum
+
+
+
+##
+const os = require("os)
+console.log("free memory", os.freemem())
+console.log("total memory", os.totalmem())
+console.log("version", os.version())
+consoe.log("processor", os.cpus())
+
+How to create a file in node js
+
+const fs = require("fs")
+
+
+const qt1 = "this is start"
+fs.writeFile("./file.html", qt1,(err)=>{
+    console.log("file is created")
+})
+
+
+how to create n number of file in single code
+use for loop
+
+for (let i = 1; i <= 10; i++){
+    fs.writeFile(`./folder/text-${i}.html`, qt1,(err)=>{
+        console.log(err)
+    })
+}
+
+quat is importent namba quat kudukalana file create aagathu error adikum
+
+    const qt2 = "this is the task"
+const [, , n] = process.argv
+for(let i=1; i<=n; i++){
+    fs.writeFile(`./task/tasks-${i}.js`, qt2,(err)=>{
+        console.log("task complete")
+    })
+}
+
+Read the contend
+     oru file la irukura data  va read panrathu 
+
+     fs.readFile("./folder/text-3.html","utf-8",(err,data)=>{
+    if(err){
+        console.log(err)
+    }else{
+        console.log("this is the data : ", data)
+    }
+})
+
+nambala oru data va oru file kulla quat ah kudukurathu
+
+const qt3 = "\n this is appen file"
+fs.appendFile("./task/tasks-3.js",qt3,(err)=>{
+    console.log("file appended")
+})
+
+
+how do delete file
+        fs.unlink("./task/tasks-7.js",(err)=>{
+    console.log("file deleted")
+        })
+
+
+how do read al file name inthe folder 
+    folder kulla irukura file name ah console.log la paakurathu
+        fs.readdir("./folder",(err,file)=>{
+    console.log("this is file name: ", file)
+        })
+
+
+how do delete al the fil in one folder   
+    oru folder la irukura ella file um epdi delete panrathau
+
+    fs.readdir("./task",(err, file)=>{
+    file.forEach((data)=>{
+        fs.unlink(`./task/${data}`,(err)=>{
+            console.log("file is deleted")
+        })
+    })
+})
+
+
+exores.js
+
+namba oru server create panna express use pannanum atha down panna "npm i express"
+import panna -> const express = require("express")
+                const app = express()
+
+                 app.get("/",(req, res)=>{
+            res.send("hi welcome all")
+                })
+                its just show name
+
+we need temp movie show
+ const movie = [...]
+ app.get("/movie", (req,res)=>{
+    res.send(movie)
+})
+
+need importend "app.listen(3700, ()=>console.log("app is started))
+
+
+install mongo db
+ "npm i mongodb"
+
+ mongo connection syntex
+ import { MongoClient } from "mongodb";
+
+const URL = "mongodb://127.0.0.1:27017"
+ async function mongoConnect(){
+        const clint = new MongoClient(URL)
+       await clint.connect()
+       console.log("mongo is connected")
+       return clint
+  }
+
+  const clint = await mongoConnect()
+
+
+##importent mongodb sangeetha sonnathu direct ah connect panrathu so namba atles vachu connect panna mudiyaathu ,
+namba mongo direct url pottu than ulla poha mudium so but namba system la mongo url potta work aagathu so athu ku url
+        ## "mongodb://127.0.0.1:27017" ##
+
+        itha than use pannanum dont forgot
+
+how do get ah movie
+    ithu namba mongoos use pannala direct ah server la irundhu edukurom like mongo server la irundhu 
+       
+
+       app.get("/movie", async(req,res)=>{
+        const { rating, language} = req.query
+
+        if(req.query.rating){
+            req.query.rating = +req.query.rating
+        }
+  const movie = await clint
+                        .db("sangeetha").collection("new").find(req.query).toArray();
+    res.send(movie)
+})
+
+    ithu mongo la namba use panra maariye inga use pannanaum apo than varum , ithu la find ku aduthu .toArray() podalana varathu 
+    namba find la .find({}).toArray() kuduthalum varum but namaku query la irukurathum varanum like namba /movie kuduthalum varanum 
+    and ?rating=8 and language=tamil kuduthalum varanum so mela irukura syndex use panrom namba yethume kudukalana all book varum but yethachum query 
+    kudutha athuku etha maari varum
+    line 180-182 yehtukuna namba rating string la iruku so namba atha number ah convert pananum apo than athu work aagum so
+
+
+how do get movie by id and delete by id 
+     2 kum kitthatta orey syndex than
+
+            app.get("/movie/:id", async(req, res)=>{
+    const { id } = req.params
+   
+    const movie = await clint.db("sangeetha").collection("new").findOne({id: id})
+    res.send(movie)
+})
+
+app.delete("/movie/:id", async (req, res)=>{
+        const { id } = req.params
+        const movie = await clint.db("sangeetha").collection("new").deleteOne({id : id})
+        res.send(movie)
+})
+
+
+How do post the values datas?
+
+        app.post("/movie", async(req, res)=>{
+    const newMovie = req.body;
+    const result = await clint.db("sangeetha").collection("new").insertOne(newMovie)
+    res.send(result)
+})
+
+ithula oru error varum midle vare use pannanaum ex namba json formate use panrom so atha sollanum so
+   
+    #####         app.use(express.json())   ##
+    itha kandipa use pannanum illana error kaatum
+
+
+How do create ah mongo db atlas in new connection i say it again we create ah new connection
+     namba ithu varaikum palaiya collection la than vera vera db use panni use pannom but ipo new collection eh create panna porom
+     => open the mongo atles => atlas logo ku keeal oru ro mark irukum atha click panni new project name pottu
+     athula add kudukanum and also commen user name and password
+     => and database access la poi 0.0.0.0/0 ip adress kudukanum 
+     => ipo atha namba cluster connect la url edukanum namba kudutah user name and password oda
+     => and ipo atha namba vscode la pottu run pannaum naan panum bothu no error 
+     => ipo post man la check panni paatha no data so add panniakanum 
+     =>> its working perfect
+
+How do use dot env?
+    instal it 1st
+        ## npm i dotenv  ##
+        import it 
+            ## import * as dotenv from 'dotenv' 
+               dotenv.config()  ##
+
+    => namba console.log(process.env) nu kututha ella details um varum 
+    => .env nu oru file create pannitu athula port=3700 nu kuduthuttu 
+    => namba console.log(process.env.port)-> ithu crt ah varanum
+    => its done namba port la port = process.env.port kudukanum its work
+
+How do put the data in db?
+
+    app.put("/movie/:id", async(req, res)=>{
+    const {id} = req.params
+    const newMovie = req.body
+    const result = await clint.db("sangeetha")
+    .collection("new").updateMany({id: id}, {$set: newMovie})
+    res.send(result)  
+   })
+  
+How do change await its make funtion
+        select await only not a res.send only await ah mattum select pannitu andha pulp symbol ah click pannuna
+        athula modul funtion nu onu varum sila samayam varathu cause namba sariya select panni iruka mateom again 
+        try panunha atha vachu namba thaniya piruchu kalam
+
+How do create ah users?
+    => ithu namba post method paari than usernama, and passaword ah req.body la vaanganum
+    => and new ah oru db set panna clint la .collection la (user) nu kudukanum thaana create aaidum
+    => # insertOne kudukanum athu romba important
+
+How do create ah hashed password?
+    => namba "npm i becrypt" install pannitu ata import pananum
+    => salting pananum const salt = await becrypt.gensalt(10)->ten time salt
+    => const hased = await becrypt.genhased(pasword, salt)
+    => ipo ithu 2 aium vachu hash panni namba return pannanum
+
+How to crete ah passaword regex?
+    regex na namba kudukura password strang or low nu solrathu ex max 8 char, special charector ithu maari
+    => search "password regex pattern"
+    => athula stack over flow la edukanum and
+    =>
+        if(!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/g.test(password)){
+        res.status(500).send({message : "password to low"})
+    }
+
+    => indha maari kudutha passwrod check panni pakum
+
+How do create ah login form
+    => ithum like post method maari than but user name and passaword ah check pannaum
+    => user name namba already post /sing up la use panna maari than name already irukanu pakkanum , one diffredn
+    athula iruka nu paathu ok panuvom but ithula iruka nu paathu athu illaina reject pananum
+    => password check namba kudukura password um namba db l irukura hased pasword um campare pananum pls watch the code
+
+     Router.post("/login", async(req, res)=>{
+        const {userName, password} = req.body;
+       
+       
+        const isUserfromDb = await findUser(userName)
+        if(!isUserfromDb){
+            res.status(500).send({message: "invalid user name "})
+            return
+        }
+        const storedPassword = isUserfromDb.password
+        const isPassword = await bcrypt.compare(password, storedPassword)
+        if(!isPassword){
+            res.status(400).send({message: "incorrect password"})
+        }
+        res.send(isPassword)  
+       
+        })
+its 
+
+How do crete ah token?
+
+    => install "npm i jsonwebtoken"
+    => import it 
+    => namba ipo id and seket key vachu token ready panna porom
+    => login la yellam finish aana udana last ah 
+    => const token = await jwt.sign({id: _id, process.env.scekrt key})
+    => res.send(token)
+
+How do create a midle ware and valid by token?
+
+    => create folder auth.js
+    => import  Jwt  from "jsonwebtoken";
+
+export const auth =(req, res, next)=>{
+   try {
+    const token = req.header("x-auth-token")
+    Jwt.verify(token, process.env.Key)
+    next()
+   } catch (error) {
+    res.status(500).send("token invalid")
+   }
+}
+
+
+    => indha auth ah namba getmovie la podanum its work
